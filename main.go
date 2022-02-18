@@ -1,10 +1,14 @@
 package main
 
-import "log"
+import (
+	"net/http"
+)
+
+func HomePage(w http.ResponseWriter, r *http.Request) {
+
+}
 
 func main() {
-	s := apiserver.New()
-	if err := s.Start(); err != nil {
-		log.Fatal(err)
-	}
+	http.HandleFunc("/", HomePage)
+	http.ListenAndServe(":8089", nil)
 }
