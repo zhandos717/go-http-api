@@ -26,6 +26,32 @@ type Categories struct {
 	CreatedAt time.Time
 }
 
+func main() {
+	HandleFunc()
+}
+func HandleFunc() {
+	r := gin.Default()
+	api := r.Group("api")
+	{
+
+		api.POST("/payment", PostPayment)
+		api.POST("/category", PostCategory)
+
+		api.GET("/payments", GetPayments)
+		api.GET("/categories", GetCategories)
+
+		api.GET("/payment/:id", GetPayment)
+		api.GET("/category/:id", GetCategory)
+
+		api.PUT("/payment/:id", UpdatePayment)
+		api.PUT("/category/:id", UpdateCategory)
+
+		api.DELETE("/category/:id", DeletePayment)
+		api.DELETE("/payment/:id", DeleteCategory)
+	}
+	r.Run(":8080")
+}
+
 func InitDb() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "./data.db")
 	db.LogMode(true)
@@ -197,31 +223,4 @@ func DeleteCategory(c *gin.Context) {
 	} else {
 		c.JSON(404, gin.H{"error": "User not found"})
 	}
-}
-
-func HandleFunc() {
-	r := gin.Default()
-	api := r.Group("api")
-	{
-
-		api.POST("/payment", PostPayment)
-		api.POST("/category", PostCategory)
-
-		api.GET("/payments", GetPayments)
-		api.GET("/categories", GetCategories)
-
-		api.GET("/payment/:id", GetPayment)
-		api.GET("/category/:id", GetCategory)
-
-		api.PUT("/payment/:id", UpdatePayment)
-		api.PUT("/category/:id", UpdateCategory)
-
-		api.DELETE("/category/:id", GetCategory)
-		api.DELETE("/payment/:id", GetCategory)
-	}
-	r.Run(":8080")
-}
-
-func main() {
-	HandleFunc()
 }
