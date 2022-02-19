@@ -6,7 +6,7 @@ import (
 )
 
 func PostCategory(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 	defer db.Close()
 	var category models.Categories
 	c.Bind(&category)
@@ -19,7 +19,7 @@ func PostCategory(c *gin.Context) {
 }
 
 func GetCategory(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 	defer db.Close()
 	id := c.Params.ByName("id")
 	var category models.Categories
@@ -34,7 +34,7 @@ func GetCategory(c *gin.Context) {
 }
 
 func GetCategories(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 	defer db.Close()
 	var category []models.Categories
 	db.Find(&category)
@@ -42,7 +42,7 @@ func GetCategories(c *gin.Context) {
 }
 
 func UpdateCategory(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 	defer db.Close()
 	id := c.Params.ByName("id")
 	var category models.Categories
@@ -67,7 +67,7 @@ func UpdateCategory(c *gin.Context) {
 }
 
 func DeleteCategory(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 
 	defer db.Close()
 

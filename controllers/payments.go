@@ -7,7 +7,7 @@ import (
 
 func PostPayment(c *gin.Context) {
 
-	db := InitDb()
+	db := models.InitDb()
 	defer db.Close()
 	var payment models.Payments
 	c.Bind(&payment)
@@ -20,7 +20,7 @@ func PostPayment(c *gin.Context) {
 	}
 }
 func GetPayment(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 	defer db.Close()
 	id := c.Params.ByName("id")
 	var payment models.Payments
@@ -34,7 +34,7 @@ func GetPayment(c *gin.Context) {
 	}
 }
 func GetPayments(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 	defer db.Close()
 	var payment []models.Payments
 	db.Find(&payment)
@@ -42,7 +42,7 @@ func GetPayments(c *gin.Context) {
 }
 
 func UpdatePayment(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 	defer db.Close()
 	id := c.Params.ByName("id")
 	var payment models.Payments
@@ -68,7 +68,7 @@ func UpdatePayment(c *gin.Context) {
 	}
 }
 func DeletePayment(c *gin.Context) {
-	db := InitDb()
+	db := models.InitDb()
 
 	defer db.Close()
 
