@@ -1,21 +1,12 @@
 package main
 
 import (
-	"time"
-
 	"github.com/zhandos717/go-http-api/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 )
-
-type Categories struct {
-	Id        int    `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
-	Name      string `gorm:"not null" form:"name" json:"name"`
-	Type      uint64 `gorm:"not null" form:"type" json:"type"`
-	CreatedAt time.Time
-}
 
 func main() {
 	HandleFunc()
@@ -49,9 +40,9 @@ func InitDb() *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	if !db.HasTable(&models.Payments{}) && !db.HasTable(&Categories{}) {
-		db.CreateTable(&models.Payments{}, &Categories{})
-		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&models.Payments{}, &Categories{})
+	if !db.HasTable(&models.Payments{}) && !db.HasTable(&models.Categories{}) {
+		db.CreateTable(&models.Payments{}, &models.Categories{})
+		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&models.Payments{}, &models.Categories{})
 	}
 
 	return db
@@ -60,7 +51,7 @@ func InitDb() *gorm.DB {
 func PostCategory(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
-	var category Categories
+	var category models.Categories
 	c.Bind(&category)
 	if category.Name != "" && category.Type > 0 && category.Type < 3 {
 		db.Create(&category)
@@ -88,7 +79,7 @@ func GetCategory(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 	id := c.Params.ByName("id")
-	var category Categories
+	var category models.Categories
 
 	db.First(&category, id)
 
@@ -103,7 +94,7 @@ func GetPayment(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 	id := c.Params.ByName("id")
-	var payment model.Payments
+	var payment models.Payments
 
 	db.First(&payment, id)
 
@@ -117,7 +108,7 @@ func GetPayment(c *gin.Context) {
 func GetCategories(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
-	var category []Categories
+	var category []models.Categories
 	db.Find(&category)
 	c.JSON(200, category)
 }
@@ -125,7 +116,7 @@ func GetCategories(c *gin.Context) {
 func GetPayments(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
-	var payment []model.Payments
+	var payment []models.Payments
 	db.Find(&payment)
 	c.JSON(200, payment)
 }
@@ -134,13 +125,13 @@ func UpdatePayment(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 	id := c.Params.ByName("id")
-	var payment model.Payments
+	var payment models.Payments
 	db.First(&payment, id)
 	if payment.Name != "" && payment.Comment != "" && payment.Price > 0 && payment.Category != "" {
 		if payment.Id != 0 {
-			var newPayment model.Payments
+			var newPayment models.Payments
 			c.Bind(&newPayment)
-			result := model.Payments{
+			result := models.Payments{
 				Id:       payment.Id,
 				Name:     newPayment.Name,
 				Comment:  newPayment.Comment,
@@ -161,13 +152,13 @@ func UpdateCategory(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 	id := c.Params.ByName("id")
-	var category Categories
+	var category models.Categories
 	db.First(&category, id)
 	if category.Name != "" && category.Type > 0 && category.Type < 3 {
 		if category.Id != 0 {
-			var newCategory Categories
+			var newCategory models.Categories
 			c.Bind(&newCategory)
-			result := model.Payments{
+			result := models.Payments{
 				Id:   category.Id,
 				Name: newCategory.Name,
 				Type: newCategory.Type,
@@ -188,7 +179,7 @@ func DeletePayment(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var payment model.Payments
+	var payment models.Payments
 	db.First(&payment, id)
 
 	if payment.Id != 0 {
@@ -205,7 +196,7 @@ func DeleteCategory(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var category Categories
+	var category models.Categories
 	db.First(&category, id)
 
 	if category.Id != 0 {
