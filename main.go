@@ -3,10 +3,10 @@ package main
 import (
 	"time"
 
+	"github.com/zhandos717/go-http-api/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"github.com/zhandos717/go-http-api/model"
-
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -49,9 +49,9 @@ func InitDb() *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	if !db.HasTable(&model.Payments{}) && !db.HasTable(&Categories{}) {
-		db.CreateTable(&model.Payments{}, &Categories{})
-		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&model.Payments{}, &Categories{})
+	if !db.HasTable(&models.Payments{}) && !db.HasTable(&Categories{}) {
+		db.CreateTable(&models.Payments{}, &Categories{})
+		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&models.Payments{}, &Categories{})
 	}
 
 	return db
@@ -73,7 +73,7 @@ func PostPayment(c *gin.Context) {
 
 	db := InitDb()
 	defer db.Close()
-	var payment model.Payments
+	var payment models.Payments
 	c.Bind(&payment)
 
 	if payment.Name != "" && payment.Comment != "" && payment.Price > 0 && payment.Category != "" {
