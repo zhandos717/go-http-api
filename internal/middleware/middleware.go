@@ -10,7 +10,7 @@ import (
 func Method(method string, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != method {
-			http.NotFound(w, r)
+			NotFoundHandler(w, r)
 			return
 		}
 		next(w, r)
@@ -21,7 +21,9 @@ func Method(method string, next http.HandlerFunc) http.HandlerFunc {
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"error": "Resource not found"}`))
+	response := `{"error": "Resource not found"}`
+	w.Write([]byte(response))
+	log.Printf("404 - %s %s %s", r.Method, r.RequestURI, r.RemoteAddr)
 }
 
 // LoggingMiddleware logs the details of each request
@@ -32,4 +34,20 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 		log.Printf("Completed in %v", time.Since(start))
 	})
+}
+
+// ErrorHandler is a middleware that catches errors and logs them
+func ErrorHandler(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Printf("Error: %v", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Header().Set("Content-Type", "application/json")
+				response := `{"error": "Internal Server Error"}`
+				w.Write([]byte(response))
+			}
+		}()
+		next(w, r)
+	}
 }
