@@ -17,3 +17,13 @@
 2024/07/25 23:27:15 Completed in 128.458µs
 2024/07/25 23:28:18 GET /api/payments [::1]:60783
 2024/07/25 23:28:18 Completed in 115.542µs
+2024/07/25 23:33:01 Server started at :8080
+2024/07/25 23:33:07 GET /api/payments [::1]:60847
+2024/07/25 23:33:07 Completed in 152.125µs
+2024/07/25 23:33:08 GET /api/payments [::1]:60847
+2024/07/25 23:33:08 Completed in 145.417µs
+2024/07/25 23:33:14 GET /api/payments [::1]:60847
+2024/07/25 23:33:14 Completed in 98.791µs
+2024/07/25 23:33:21 404 - GET /api/payments%D0%B0%D1%86%D1%84%D0%B0 [::1]:60847
+2024/07/25 23:33:32 GET /api/payments [::1]:60847
+2024/07/25 23:33:32 Completed in 99.834µs

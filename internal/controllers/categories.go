@@ -7,11 +7,6 @@ import (
 )
 
 func PostCategory(w http.ResponseWriter, r *http.Request) {
-	// Intentional error to test ErrorHandler middleware
-	if r.URL.Query().Get("error") == "true" {
-		panic("Something went wrong!")
-	}
-
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "PostCategory"})
 }

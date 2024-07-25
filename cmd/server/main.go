@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/zhandos717/go-http-api/internal/middleware"
 	"github.com/zhandos717/go-http-api/internal/routes"
 )
 
@@ -22,11 +21,8 @@ func main() {
 
 	r := routes.SetupRoutes()
 
-	// Обертывание маршрутизатора в мидлвару для логирования
-	loggedRouter := middleware.LoggingMiddleware(r)
-
 	log.Println("Server started at :8080")
-	if err := http.ListenAndServe(":8080", loggedRouter); err != nil {
+	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatalf("Could not start server: %s\n", err.Error())
 	}
 }
